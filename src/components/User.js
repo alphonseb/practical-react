@@ -2,16 +2,27 @@ import React from 'react';
 
 export class User extends React.Component {
     state = {
+        userNumber: 1,
+        people: [],
         firstName: '',
         lastName: '',
         street: '',
         city: ''
     };
 
+    updateUserNumber = event => {
+        this.setState({
+            userNumber: event.target.value
+        });
+    };
+
     fetchUser = async () => {
-        const response = await window.fetch('https://api.randomuser.me/');
+        const response = await window.fetch(
+            `https://api.randomuser.me/?results=${this.state.userNumber}`
+        );
         const data = await response.json();
-        this.updateUser(data);
+        this.setState({ people: data.results });
+        // this.updateUser(data);
     };
 
     updateUser = user => {
@@ -24,33 +35,41 @@ export class User extends React.Component {
     render() {
         return (
             <div className="user">
-                <button onClick={this.fetchUser}>Get Random User</button>
-                <div style={{ width: 400, margin: '0 auto' }}>
-                    <p style={{ textAlign: 'left' }}>
-                        First Name :{' '}
-                        <span style={{ textTransform: 'capitalize' }}>
-                            {this.state.firstName}
-                        </span>
-                    </p>
-                    <p style={{ textAlign: 'left' }}>
-                        Last Name :{' '}
-                        <span style={{ textTransform: 'capitalize' }}>
-                            {this.state.lastName}
-                        </span>
-                    </p>
-                    <p style={{ textAlign: 'left' }}>
-                        Street :{' '}
-                        <span style={{ textTransform: 'capitalize' }}>
-                            {this.state.street}
-                        </span>
-                    </p>
-                    <p style={{ textAlign: 'left' }}>
-                        City :{' '}
-                        <span style={{ textTransform: 'capitalize' }}>
-                            {this.state.city}
-                        </span>
-                    </p>
-                </div>
+                <input
+                    type="number"
+                    value={this.state.userNumber}
+                    onChange={this.updateUserNumber}
+                />
+                <button onClick={this.fetchUser}>
+                    Get {this.state.userNumber} Random Users
+                </button>
+                {this.state.people.map(person => {
+                    return (
+                        <div
+                            style={{ width: 400, margin: '0 auto' }}
+                            key={person.login.uuid}
+                        >
+                            <p style={{ textAlign: 'left' }}>
+                                Title :{' '}
+                                <span style={{ textTransform: 'capitalize' }}>
+                                    {person.name.title}
+                                </span>
+                            </p>
+                            <p style={{ textAlign: 'left' }}>
+                                First Name :{' '}
+                                <span style={{ textTransform: 'capitalize' }}>
+                                    {person.name.first}
+                                </span>
+                            </p>
+                            <p style={{ textAlign: 'left' }}>
+                                Last Name:{' '}
+                                <span style={{ textTransform: 'capitalize' }}>
+                                    {person.name.last}
+                                </span>
+                            </p>
+                        </div>
+                    );
+                })}
             </div>
         );
     }
