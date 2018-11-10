@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Counter } from './components/Counter';
 import { ImageSlider } from './components/Imageslider';
 import { Form } from './components/Form';
+import { User } from './components/User';
 
 class App extends Component {
     state = {
@@ -40,6 +41,7 @@ class App extends Component {
                 {this.state.sliderVisible ? <ImageSlider /> : null}
                 <button onClick={this.toggleSlider}>{btnTxt} Slider</button>
                 <Form logState={this.logFormState} />
+                <User />
             </div>
         );
     }
