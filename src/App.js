@@ -5,6 +5,7 @@ import { Counter } from './components/Counter';
 import { ImageSlider } from './components/Imageslider';
 import { Form } from './components/Form';
 import { User } from './components/User';
+import { Todolist } from './components/Todolist';
 
 class App extends Component {
     state = {
@@ -42,6 +43,7 @@ class App extends Component {
                 <button onClick={this.toggleSlider}>{btnTxt} Slider</button>
                 <Form logState={this.logFormState} />
                 <User />
+                <Todolist />
             </div>
         );
     }
