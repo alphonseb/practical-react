@@ -11,7 +11,7 @@ export class Todo extends React.Component {
         })
         this.props.toggleToDo({
             id: this.props.id,
-            complete: this.state.complete,
+            complete: _event.target.checked,
             name: this.props.name
         })
     }
@@ -26,7 +26,19 @@ export class Todo extends React.Component {
                     id={this.props.id}
                     onChange={this.handleChange}
                 />
-                <label htmlFor={this.props.id}>{this.props.name}</label>
+                <label
+                    style={
+                        this.state.complete
+                            ? { textDecoration: 'line-through' }
+                            : {}
+                    }
+                    htmlFor={this.props.id}
+                >
+                    {this.props.name}
+                </label>
+                <button onClick={() => this.props.deleteToDo(this.props.id)}>
+                    &times;
+                </button>
             </div>
         )
     }
