@@ -1,11 +1,37 @@
 import React from 'react'
 import { TodoForm } from './todo_components/TodoForm'
 import { Todo } from './todo_components/Todo'
+import base from '../base'
 
 export class Todolist extends React.Component {
     state = {
-        todos: JSON.parse(localStorage.getItem('todos')) || [],
-        filter: 'all'
+        todos: [],
+        filter: 'uncomplete'
+    }
+
+    componentDidMount() {
+        this.getData()
+    }
+
+    getData = async () => {
+        const baseData = await base.fetch('todo1/todos', { context: this })
+
+        if (baseData.length) {
+            this.setState({ todos: Object.values(baseData) })
+        } else {
+            await base.post('todo1/owner', {
+                data: 'fen'
+            })
+        }
+        this.href = base.syncState('todo1/todos', {
+            context: this,
+            state: 'todos',
+            asArray: true
+        })
+    }
+
+    componentWillUnmount() {
+        base.removeBinding(this.ref)
     }
 
     addToDo = async todo => {
@@ -15,7 +41,7 @@ export class Todolist extends React.Component {
             }
         })
 
-        await localStorage.setItem('todos', JSON.stringify(this.state.todos))
+        // await localStorage.setItem('todos', JSON.stringify(this.state.todos))
     }
 
     deleteToDo = async _id => {
@@ -23,7 +49,7 @@ export class Todolist extends React.Component {
             return { todos: state.todos.filter(todo => todo.id !== _id) }
         })
 
-        await localStorage.setItem('todos', JSON.stringify(this.state.todos))
+        // await localStorage.setItem('todos', JSON.stringify(this.state.todos))
     }
 
     deleteAll = async () => {
@@ -31,7 +57,7 @@ export class Todolist extends React.Component {
             todos: []
         })
 
-        await localStorage.setItem('todos', JSON.stringify(this.state.todos))
+        // await localStorage.setItem('todos', JSON.stringify(this.state.todos))
     }
 
     toggleToDo = async _todo => {
@@ -50,7 +76,7 @@ export class Todolist extends React.Component {
                 })
             }
         })
-        await localStorage.setItem('todos', JSON.stringify(this.state.todos))
+        // await localStorage.setItem('todos', JSON.stringify(this.state.todos))
     }
 
     updateFilter = _filterName => {

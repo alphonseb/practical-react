@@ -2,8 +2,8 @@ import React from 'react'
 
 export class TodoForm extends React.Component {
     state = {
-        todoName: '',
-        todoId: 0
+        todoName: ''
+        // todoId: 0
     }
 
     handleChange = _event => {
@@ -17,12 +17,12 @@ export class TodoForm extends React.Component {
         this.props.addToDo({
             name: this.state.todoName,
             complete: false,
-            id: this.state.todoId
+            id: Date.now()
         })
         this.setState(state => {
             return {
-                todoName: '',
-                todoId: state.todoId + 1
+                todoName: ''
+                // todoId: state.todoId + 1
             }
         })
     }
@@ -33,6 +33,7 @@ export class TodoForm extends React.Component {
                 <input
                     type="text"
                     name="todoName"
+                    autoComplete="off"
                     value={this.state.todoName}
                     onChange={this.handleChange}
                 />
